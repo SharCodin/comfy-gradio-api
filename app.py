@@ -1,6 +1,7 @@
 import json
 import os
 import time
+import random
 
 
 import gradio as gr
@@ -34,6 +35,7 @@ def generate_image(input_image):
     with open("workflow_api.json", "r") as file_json:
         prompt = json.load(file_json)
 
+    prompt["3"]["inputs"]["seed"] = random.randint(1, 1500000)
     image = Image.fromarray(input_image)
     min_side = min(image.size)
     scale_factor = 512 / min_side
