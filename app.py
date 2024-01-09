@@ -31,11 +31,12 @@ def start_queue(prompt_workflow):
     requests.post(URL, data=data)
 
 
-def generate_image(input_image):
+def generate_image(input_image):   
     with open("workflow_api.json", "r") as file_json:
         prompt = json.load(file_json)
 
     prompt["3"]["inputs"]["seed"] = random.randint(1, 1500000)
+    global cached_seed
     if cached_seed == prompt["3"]["inputs"]["seed"]:
         return get_latest_image(OUTPUT_DIR)
     cached_seed = prompt["3"]["inputs"]["seed"]
