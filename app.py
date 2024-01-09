@@ -11,11 +11,11 @@ import requests
 from PIL import Image
 
 
-
 URL = "http://127.0.0.1:8188/prompt"
 INPUT_DIR = "replace with comfyui input dir path"
 OUTPUT_DIR = "replace with comfyui ouput directory path"
 
+cached_seed = 0
 
 def get_latest_image(folder):
     files = os.listdir(folder)
@@ -36,6 +36,10 @@ def generate_image(input_image):
         prompt = json.load(file_json)
 
     prompt["3"]["inputs"]["seed"] = random.randint(1, 1500000)
+    if cached_seed == prompt["3"]["inputs"]["seed"]:
+        return get_latest_image(OUTPUT_DIR)
+    cached_seed = prompt["3"]["inputs"]["seed"]
+    
     image = Image.fromarray(input_image)
     min_side = min(image.size)
     scale_factor = 512 / min_side
